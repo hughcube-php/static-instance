@@ -16,7 +16,7 @@ trait StaticInstanceTrait
     {
         $className = get_called_class();
 
-        if ($refresh || !isset(self::$__________instances[$className])){
+        if ($refresh || !isset(self::$__________instances[$className])) {
             self::$__________instances[$className] = new static();
         }
 

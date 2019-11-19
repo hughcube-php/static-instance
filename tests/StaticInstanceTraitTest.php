@@ -11,21 +11,32 @@ class StaticInstanceTraitTest extends TestCase
 {
     public function testInstance()
     {
-        /** @var InstanceTest $class */
-        $class = Mockery::mock(StaticInstanceTest::class)->makePartial();
+        $instance = StaticInstanceTest::instance();
+        $this->assertInstanceOf(StaticInstanceInterface::class, $instance);
 
-        $instance1 = $class::instance();
-        $this->assertInstanceOf(StaticInstanceInterface::class, $instance1);
+        $this->assertSame($instance, StaticInstanceTest::instance());
 
-        $instance2 = $class::instance();
-        $this->assertSame($instance1, $instance2);
+        $this->assertNotSame($instance, StaticInstanceTest::instance(true));
+    }
 
-        $instance3 = $class::instance(true);
-        $this->assertNotSame($instance3, $instance1);
+    public function testTmplement()
+    {
+        $instance = StaticInstanceImplementTest::instance();
+
+        $this->assertInstanceOf(StaticInstanceInterface::class, $instance);
+        $this->assertInstanceOf(StaticInstanceTest::class, $instance);
+
+        $this->assertNotSame($instance, StaticInstanceTest::instance());
+
+        $this->assertSame($instance, StaticInstanceImplementTest::instance());
     }
 }
 
 class StaticInstanceTest implements StaticInstanceInterface
 {
     use StaticInstanceTrait;
+}
+
+class StaticInstanceImplementTest extends StaticInstanceTest
+{
 }
