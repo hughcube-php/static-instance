@@ -3,7 +3,6 @@
 namespace HughCube\StaticInstance\Tests;
 
 use HughCube\StaticInstanceInterface;
-use HughCube\StaticInstanceTrait;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 
@@ -11,32 +10,23 @@ class StaticInstanceTraitTest extends TestCase
 {
     public function testInstance()
     {
-        $instance = StaticInstanceTest::instance();
+        $instance = StaticInstanceClass::instance();
+
+        $this->assertSame($instance->value, 1);
+        $this->assertSame($instance, StaticInstanceClass::instance());
+        $this->assertInstanceOf(StaticInstanceClass::class, $instance);
         $this->assertInstanceOf(StaticInstanceInterface::class, $instance);
 
-        $this->assertSame($instance, StaticInstanceTest::instance());
+        $newInstance = StaticInstanceClass::instance(true);
+        $this->assertNotSame($instance, $newInstance);
+        $this->assertInstanceOf(StaticInstanceClass::class, $newInstance);
+        $this->assertInstanceOf(StaticInstanceInterface::class, $newInstance);
 
-        $this->assertNotSame($instance, StaticInstanceTest::instance(true));
+        $newInstance = StaticInstanceClass::newInstance(3, 5);
+        $this->assertNotSame($instance, $newInstance);
+        $this->assertSame($newInstance->value, 3);
+        $this->assertSame($newInstance->value2, 5);
+        $this->assertInstanceOf(StaticInstanceClass::class, $newInstance);
+        $this->assertInstanceOf(StaticInstanceInterface::class, $newInstance);
     }
-
-    public function testTmplement()
-    {
-        $instance = StaticInstanceImplementTest::instance();
-
-        $this->assertInstanceOf(StaticInstanceInterface::class, $instance);
-        $this->assertInstanceOf(StaticInstanceTest::class, $instance);
-
-        $this->assertNotSame($instance, StaticInstanceTest::instance());
-
-        $this->assertSame($instance, StaticInstanceImplementTest::instance());
-    }
-}
-
-class StaticInstanceTest implements StaticInstanceInterface
-{
-    use StaticInstanceTrait;
-}
-
-class StaticInstanceImplementTest extends StaticInstanceTest
-{
 }
