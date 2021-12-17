@@ -8,34 +8,29 @@ use ReflectionMethod;
 
 trait StaticInstanceTrait
 {
-    private static $__________instances = [];
+    private static $classSelfInstances = [];
 
     /**
-     * 获取实例
-     *
      * @param  bool  $refresh
      * @return static
      */
-    public static function instance($refresh = false)
+    public static function instance(bool $refresh = false)
     {
         $class = static::class;
 
-        if ($refresh || !isset(self::$__________instances[$class])) {
-            self::$__________instances[$class] = static::newInstance();
+        if ($refresh || !isset(self::$classSelfInstances[$class])) {
+            self::$classSelfInstances[$class] = static::newInstance();
         }
 
-        return self::$__________instances[$class];
+        return self::$classSelfInstances[$class];
     }
 
+    /**
+     * @return static
+     */
     public static function newInstance()
     {
         $class = static::class;
-        $args = func_get_args();
-
-        if (empty($args)) {
-            return new $class();
-        }
-
-        return new $class(...$args);
+        return new $class(...func_get_args());
     }
 }
