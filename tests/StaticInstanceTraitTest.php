@@ -3,7 +3,6 @@
 namespace HughCube\StaticInstance\Tests;
 
 use HughCube\StaticInstanceInterface;
-use Mockery;
 use PHPUnit\Framework\TestCase;
 
 class StaticInstanceTraitTest extends TestCase
@@ -19,6 +18,13 @@ class StaticInstanceTraitTest extends TestCase
 
         $newInstance = StaticInstanceClass::instance(true);
         $this->assertNotSame($instance, $newInstance);
+        $this->assertInstanceOf(StaticInstanceClass::class, $newInstance);
+        $this->assertInstanceOf(StaticInstanceInterface::class, $newInstance);
+
+        $newInstance = StaticInstanceClass::new(3, 5);
+        $this->assertNotSame($instance, $newInstance);
+        $this->assertSame($newInstance->value, 3);
+        $this->assertSame($newInstance->value2, 5);
         $this->assertInstanceOf(StaticInstanceClass::class, $newInstance);
         $this->assertInstanceOf(StaticInstanceInterface::class, $newInstance);
 

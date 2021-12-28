@@ -19,7 +19,7 @@ trait StaticInstanceTrait
         $class = static::class;
 
         if ($refresh || !isset(self::$classSelfInstances[$class])) {
-            self::$classSelfInstances[$class] = static::newInstance();
+            self::$classSelfInstances[$class] = static::new();
         }
 
         return self::$classSelfInstances[$class];
@@ -29,6 +29,14 @@ trait StaticInstanceTrait
      * @return static
      */
     public static function newInstance()
+    {
+        return static::new(...func_get_args());
+    }
+
+    /**
+     * @return static
+     */
+    public static function new()
     {
         $class = static::class;
         return new $class(...func_get_args());
